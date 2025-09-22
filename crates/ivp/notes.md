@@ -14,15 +14,29 @@ where `q` is the order of the lower-order method.
 
 # Next steps
 
-Implement a MLIR backend for a closure-free 1ML, using type-level shapes for shape checking?
-
-Implement a MLIR backend for an embedded DSL in Rust using dynamic shape checking. No control flow. We could use egg for this, but let's keep it simple.
-
-Could we do this as a DSL in Lean?
+Implement correctness checks.
 
 # Optimization log
 
 ## Tsit5
+
+Current numbers:
+
+|                | OrdinaryDiffEq.jl | Rust |
+|----------------|-------------------|------|
+| Lotka-Volterra | 48μs              | 3ms  |
+| Pleiades       | 11ms              | 24ms |
+
+I think that implementing a PI controller instead of a P controller might be the
+next thing to do in order to get closer to OrdinaryDiffEq. The fact that our
+Pleiades time is within 2x of OrdinaryDiffEq.jl seems to imply that we're not so
+far off in terms of efficiency of arithmetic, and perhaps after implementing a
+PI controller we'll be there, though we have to make sure that we are also
+producing accurate solves.
+
+We should also compare with [ode_solvers](https://srenevey.github.io/ode-solvers/).
+
+In fact, it looks like ode_solvers has quite a few nice things, like [FloatNumber](https://docs.rs/ode_solvers/latest/ode_solvers/dop_shared/trait.FloatNumber.html).
 
 ### Implemented optimizations
 
@@ -30,3 +44,4 @@ Could we do this as a DSL in Lean?
 - Use [crunchy](https://github.com/eira-fransham/crunchy) to manually unroll the stage loop. This didn't make a difference for lotka-volterra, but gave a 15% speedup on pleiades. This implies to me that LLVM already decided to unroll the loop for lotka-volterra, but didn't unroll the loop for pleiades.
 - Change the order of iteration for the computation of y1hat to put `s` in the outside loop. This seems to at best give a marginal improvement.
 - Use [mimalloc](https://github.com/microsoft/mimalloc). This gives a 10-30% speedup, essentially for free. That is pretty fantastic; I'm going to use mimalloc in all of my Rust programs now. This does imply that using a bump allocator would probably be even faster. Oddly enough, mimalloc v2 seems faster than v3.
+- Use the [Hairer norm](https://docs.sciml.ai/DiffEqDocs/dev/extras/timestepping/) instead of the L2 norm for error estimate.

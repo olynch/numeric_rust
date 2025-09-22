@@ -138,7 +138,12 @@ impl<F: Float + Scalar + ComplexField<RealField = F>> StepAlgorithm<F> for Tsit5
                 y1hat[i] = y1hat[i] + btilde_dt * ks[(i, s)];
             }
         }}
-        let error = EuclideanNorm.metric_distance(&y1, &y1hat);
-        (ks, error)
+        let mut error = F::zero();
+        for i in 0..n {
+            let d = y1[i] - y1hat[i];
+            error += d * d;
+        }
+        error /= F::from(n).unwrap();
+        (ks, Float::sqrt(error))
     }
 }

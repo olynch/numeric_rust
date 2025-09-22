@@ -32,7 +32,7 @@ fn ivp(c: &mut Criterion) {
         c,
         lotka_volterra::create_prob(),
         Tsit5,
-        AdaptiveStep::new(0.1, 1e-3, 1e-6, 4),
+        IntegralController::new(0.1, 1e-3, 1e-6, 4),
     );
 
     // bench_ivp(
@@ -48,7 +48,7 @@ fn ivp(c: &mut Criterion) {
         c,
         pleiades::create_prob(),
         Tsit5,
-        AdaptiveStep::new(0.1, 1e-3, 1e-6, 4),
+        IntegralController::new(0.1, 1e-3, 1e-6, 4),
     );
 }
 

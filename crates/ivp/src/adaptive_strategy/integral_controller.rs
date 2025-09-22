@@ -3,14 +3,14 @@ use num_traits::Float;
 
 use crate::adaptive_strategy::AdaptiveStrategy;
 
-pub struct AdaptiveStep<F> {
+pub struct IntegralController<F> {
     init: F,
     atol: F,
     rtol: F,
     order: u32,
 }
 
-impl<F> AdaptiveStep<F> {
+impl<F> IntegralController<F> {
     pub fn new(init: F, atol: F, rtol: F, order: u32) -> Self {
         Self {
             init,
@@ -21,7 +21,7 @@ impl<F> AdaptiveStep<F> {
     }
 }
 
-impl<F: Float + PartialOrd> AdaptiveStrategy<F, F> for AdaptiveStep<F> {
+impl<F: Float + PartialOrd> AdaptiveStrategy<F, F> for IntegralController<F> {
     fn init_dt(&self) -> F {
         self.init
     }

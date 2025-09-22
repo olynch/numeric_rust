@@ -1,10 +1,12 @@
 use nalgebra::*;
 
-pub mod adaptive_step;
 pub mod constant_step;
+pub mod integral_controller;
+pub mod proportional_integral_controller;
 
-pub use adaptive_step::*;
 pub use constant_step::*;
+pub use integral_controller::*;
+pub use proportional_integral_controller::*;
 
 pub trait AdaptiveStrategy<F, E> {
     fn init_dt(&self) -> F;
