@@ -1,0 +1,22 @@
+[package]
+name = "benchmarks_criterion"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+nalgebra.workspace = true
+num-traits.workspace = true
+my_linalg.path = "../my_linalg"
+ivp.path = "../ivp"
+ivp_examples.path = "../ivp_examples"
+
+[dev-dependencies]
+criterion = "0.7.0"
+
+[[bench]]
+name = "vector_add"
+harness = false
+
+[[bench]]
+name = "ivp"
+harness = false

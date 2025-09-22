@@ -1,0 +1,11 @@
+[workspace]
+resolver = "3"
+members = ["crates/ivp", "crates/benchmarks_criterion", "crates/ivp_examples", "crates/benchmarks_gungraun", "crates/my_linalg"]
+
+[workspace.dependencies]
+nalgebra = { version = "0.34.0", features = ["rand"] }
+num-traits = "0.2.19"
+tempfile = "3.22.0"
+
+[build]
+rustflags = ["-C", "target-cpu=native"]

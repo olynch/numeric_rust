@@ -1,0 +1,5 @@
+- [ ] Write benchmarks for tsit5 and rosenbrock23
+- [ ] See if we can speed up the benchmarks by:
+  - [ ] Bump allocation
+  - [ ] Using slices instead of DVector
+- [ ] Compare to OrdinaryDiffEq.jl performance
