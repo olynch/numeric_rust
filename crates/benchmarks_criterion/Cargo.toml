@@ -6,6 +6,7 @@ edition = "2024"
 [dependencies]
 nalgebra.workspace = true
 num-traits.workspace = true
+mimalloc.workspace = true
 my_linalg.path = "../my_linalg"
 ivp.path = "../ivp"
 ivp_examples.path = "../ivp_examples"

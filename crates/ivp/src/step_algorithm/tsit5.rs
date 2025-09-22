@@ -1,6 +1,7 @@
 use crate::OdeSystem;
 
 use super::StepAlgorithm;
+use crunchy::unroll;
 use nalgebra::*;
 use num_traits::Float;
 
@@ -120,7 +121,7 @@ impl<F: Float + Scalar + ComplexField<RealField = F>> StepAlgorithm<F> for Tsit5
         let n = system.dimension();
         let mut ks = Self::Interpolant::zeros(n);
         y1.copy_from(&y0);
-        for s in 0..7 {
+        unroll! { for s in 0..7 {
             system.vfield(ks.column_mut(s), y1.as_view(), t + cache.c[s] * dt);
             for i in 0..n {
                 let mut dy = F::zero();
@@ -129,15 +130,14 @@ impl<F: Float + Scalar + ComplexField<RealField = F>> StepAlgorithm<F> for Tsit5
                 }
                 y1[i] = y0[i] + dt * dy;
             }
-        }
+        } }
         let mut y1hat = y0.into_owned();
-        for i in 0..n {
-            let mut dy = F::zero();
-            for s in 0..7 {
-                dy += cache.btilde[s] * ks[(i, s)];
+        unroll! { for s in 0..7 {
+            let btilde_dt = cache.btilde[s] * dt;
+            for i in 0..n {
+                y1hat[i] = y1hat[i] + btilde_dt * ks[(i, s)];
             }
-            y1hat[i] = y1hat[i] + dt * dy;
-        }
+        }}
         let error = EuclideanNorm.metric_distance(&y1, &y1hat);
         (ks, error)
     }

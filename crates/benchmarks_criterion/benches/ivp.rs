@@ -4,6 +4,9 @@ use ivp_examples::*;
 use nalgebra::*;
 use num_traits::Float;
 
+#[global_allocator]
+static GLOBAL: mimalloc::MiMalloc = mimalloc::MiMalloc;
+
 fn bench_ivp<
     F: Float + Scalar + 'static,
     S: OdeSystem<F>,
